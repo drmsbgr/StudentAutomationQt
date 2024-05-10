@@ -14,7 +14,7 @@ def loadTable(tableName):
     return res.fetchall()
 
 
-def executeSql(sql, params=""):
+def executeSql(sql, params):
     conn = connectDB()
     cur = conn.cursor()
     cur.execute(sql, params)
