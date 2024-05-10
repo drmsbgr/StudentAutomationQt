@@ -16,6 +16,37 @@ class CitiesView(QtWidgets.QWidget):
         self.headerLabel = QtWidgets.QLabel("Şehirler", alignment=QtCore.Qt.AlignCenter)
         self.table = QtWidgets.QTableWidget()
 
+        self.refreshTable()
+
+        self.backBtn = QtWidgets.QPushButton("Geri Dön")
+
+        self.createCityGroup = QtWidgets.QGroupBox("Şehir Oluşturma")
+        self.createCityGroup.layout = QtWidgets.QVBoxLayout(self.createCityGroup)
+
+        self.cityNameLabel = QtWidgets.QLabel("Şehir Adı")
+        self.cityNameInput = QtWidgets.QPlainTextEdit()
+        self.createCityBtn = QtWidgets.QPushButton("Şehri Ekle")
+        self.createCityBtn.clicked.connect(self.createCity)
+        self.createCityGroup.layout.addWidget(self.cityNameLabel)
+        self.createCityGroup.layout.addWidget(self.cityNameInput)
+        self.createCityGroup.layout.addWidget(self.createCityBtn)
+
+        self.layout = QtWidgets.QVBoxLayout(self)
+        self.layout.addWidget(self.headerLabel)
+        self.layout.addWidget(self.table)
+        self.layout.addWidget(self.createCityGroup)
+        self.layout.addWidget(self.backBtn)
+
+        self.backBtn.clicked.connect(self.backToMenu)
+
+    def createCity(self):
+        sql = """INSERT INTO cities (cityName) VALUES (?)"""
+
+        dbhelper.executeSql(sql, (self.cityNameInput.toPlainText(),))
+
+        self.refreshTable()
+
+    def refreshTable(self):
         l = dbhelper.loadTable("cities")
 
         self.cities = []
@@ -28,17 +59,8 @@ class CitiesView(QtWidgets.QWidget):
         self.table.setHorizontalHeaderLabels(["ID", "Şehir Adı"])
 
         for i, c in enumerate(self.cities):
-            self.table.setItem(i, 0, c.id)
-            self.table.setItem(i, 1, c.name)
-
-        self.backBtn = QtWidgets.QPushButton("Geri Dön")
-
-        self.layout = QtWidgets.QVBoxLayout(self)
-        self.layout.addWidget(self.headerLabel)
-        self.layout.addWidget(self.table)
-        self.layout.addWidget(self.backBtn)
-
-        self.backBtn.clicked.connect(self.backToMenu)
+            self.table.setItem(i, 0, QtWidgets.QTableWidgetItem(c.id))
+            self.table.setItem(i, 1, QtWidgets.QTableWidgetItem(c.name))
 
     @QtCore.Slot()
     def backToMenu(self):

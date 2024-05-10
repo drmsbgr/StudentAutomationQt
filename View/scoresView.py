@@ -28,10 +28,10 @@ class ScoresView(QtWidgets.QWidget):
         self.table.setHorizontalHeaderLabels(["ID", "Not", "Öğrenci Id", "Sınav Id"])
 
         for i, c in enumerate(self.exams):
-            self.table.setItem(i, 0, c.id)
-            self.table.setItem(i, 1, c.score)
-            self.table.setItem(i, 2, c.studentId)
-            self.table.setItem(i, 3, c.examId)
+            self.table.setItem(i, 0, QtWidgets.QTableWidgetItem(c.id))
+            self.table.setItem(i, 1, QtWidgets.QTableWidgetItem(c.score))
+            self.table.setItem(i, 2, QtWidgets.QTableWidgetItem(c.studentId))
+            self.table.setItem(i, 3, QtWidgets.QTableWidgetItem(c.examId))
 
         self.backBtn = QtWidgets.QPushButton("Geri Dön")
 

@@ -28,9 +28,9 @@ class DepartmentsView(QtWidgets.QWidget):
         self.table.setHorizontalHeaderLabels(["ID", "Bölüm Adı", "Bölüm Açıklaması"])
 
         for i, c in enumerate(self.departments):
-            self.table.setItem(i, 0, c.id)
-            self.table.setItem(i, 1, c.name)
-            self.table.setItem(i, 2, c.desc)
+            self.table.setItem(i, 0, QtWidgets.QTableWidgetItem(c.id))
+            self.table.setItem(i, 1, QtWidgets.QTableWidgetItem(c.name))
+            self.table.setItem(i, 2, QtWidgets.QTableWidgetItem(c.desc))
 
         self.backBtn = QtWidgets.QPushButton("Geri Dön")
 

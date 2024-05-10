@@ -5,6 +5,24 @@ from Helper import dbhelper
 
 dbhelper.connectDB()
 dbhelper.createTable(
+    "CREATE TABLE IF NOT EXISTS scoreTypes(scoreTypeId INTEGER, scoreTypeName VARCHAR(255))"
+)
+
+scoreTypes = dbhelper.loadTable("scoreTypes")
+labels = [row[1] for row in scoreTypes]
+
+if "MIDTERM" not in labels:
+    dbhelper.executeSql(
+        "INSERT INTO scoreTypes (scoreTypeId,scoreTypeName) VALUES (1,'MIDTERM')"
+    )
+
+
+if "FINAL" not in labels:
+    dbhelper.executeSql(
+        "INSERT INTO scoreTypes (scoreTypeId,scoreTypeName) VALUES (2,'FINAL')"
+    )
+
+dbhelper.createTable(
     "CREATE TABLE IF NOT EXISTS students(studentId INTEGER PRIMARY KEY,studentName VARCHAR(255) ,studentSurname VARCHAR(255),studentNo INTEGER,studentCityId INTEGER,studentDepartmentId INTEGER)"
 )
 dbhelper.createTable(
@@ -17,7 +35,7 @@ dbhelper.createTable(
     "CREATE TABLE IF NOT EXISTS exams(examId INTEGER PRIMARY KEY, examName VARCHAR(255))"
 )
 dbhelper.createTable(
-    "CREATE TABLE IF NOT EXISTS scores(scoreId INTEGER PRIMARY KEY, score FLOAT, scoreStudentId INTEGER, scoreExamId INTEGER)"
+    "CREATE TABLE IF NOT EXISTS scores(scoreId INTEGER PRIMARY KEY, score FLOAT, scoreTypeId INTEGER, scoreStudentId INTEGER, scoreExamId INTEGER)"
 )
 
 

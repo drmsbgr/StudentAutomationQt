@@ -17,6 +17,18 @@ class StudentsView(QtWidgets.QWidget):
             "Öğrenciler", alignment=QtCore.Qt.AlignCenter
         )
         self.table = QtWidgets.QTableWidget()
+        self.refreshStudents()
+
+        self.backBtn = QtWidgets.QPushButton("Geri Dön")
+
+        self.layout = QtWidgets.QVBoxLayout(self)
+        self.layout.addWidget(self.headerLabel)
+        self.layout.addWidget(self.table)
+        self.layout.addWidget(self.backBtn)
+
+        self.backBtn.clicked.connect(self.backToMenu)
+
+    def refreshStudents(self):
 
         l = dbhelper.loadTable("students")
 
@@ -34,21 +46,12 @@ class StudentsView(QtWidgets.QWidget):
         )
 
         for i, s in enumerate(self.students):
-            self.table.setItem(i, 0, s.id)
-            self.table.setItem(i, 1, s.name)
-            self.table.setItem(i, 2, s.surname)
-            self.table.setItem(i, 3, s.no)
-            self.table.setItem(i, 4, s.cityId)
-            self.table.setItem(i, 5, s.departmentId)
-
-        self.backBtn = QtWidgets.QPushButton("Geri Dön")
-
-        self.layout = QtWidgets.QVBoxLayout(self)
-        self.layout.addWidget(self.headerLabel)
-        self.layout.addWidget(self.table)
-        self.layout.addWidget(self.backBtn)
-
-        self.backBtn.clicked.connect(self.backToMenu)
+            self.table.setItem(i, 0, QtWidgets.QTableWidgetItem(str(s.id)))
+            self.table.setItem(i, 1, QtWidgets.QTableWidgetItem(str(s.name)))
+            self.table.setItem(i, 2, QtWidgets.QTableWidgetItem(str(s.surname)))
+            self.table.setItem(i, 3, QtWidgets.QTableWidgetItem(str(s.no)))
+            self.table.setItem(i, 4, QtWidgets.QTableWidgetItem(str(s.cityId)))
+            self.table.setItem(i, 5, QtWidgets.QTableWidgetItem(str(s.departmentId)))
 
     @QtCore.Slot()
     def backToMenu(self):

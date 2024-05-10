@@ -28,8 +28,8 @@ class ExamsView(QtWidgets.QWidget):
         self.table.setHorizontalHeaderLabels(["ID", "Sınav Adı"])
 
         for i, c in enumerate(self.exams):
-            self.table.setItem(i, 0, c.id)
-            self.table.setItem(i, 1, c.name)
+            self.table.setItem(i, 0, QtWidgets.QTableWidgetItem(c.id))
+            self.table.setItem(i, 1, QtWidgets.QTableWidgetItem(c.name))
 
         self.backBtn = QtWidgets.QPushButton("Geri Dön")
 

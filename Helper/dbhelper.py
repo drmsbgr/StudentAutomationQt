@@ -14,13 +14,25 @@ def loadTable(tableName):
     return res.fetchall()
 
 
-def executeSql(sql):
-    cur = connectDB().cursor()
-    return cur.execute(sql)
+def executeSql(sql, params=""):
+    conn = connectDB()
+    cur = conn.cursor()
+    cur.execute(sql, params)
+    conn.commit()
+    conn.close()
+    return cur.lastrowid
 
 
 def createTable(sql):
     con = connectDB()
     cur = con.cursor()
     cur.execute(sql)
+    con.close()
+
+
+def insertToTable(tableName: str, schema: str, data: tuple):
+    con = connectDB()
+    cur = con.cursor()
+    cur.executemany(f"INSERT INTO {tableName} VALUES ({schema})", data)
+    con.commit()
     con.close()
