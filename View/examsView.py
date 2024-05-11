@@ -88,6 +88,9 @@ class ExamsView(QtWidgets.QWidget, BaseView):
         rowIndex = self.table.selectedItems()[0].row()
         e = self.exams[rowIndex]
 
+        sql = f"""DELETE FROM scores WHERE scoreExamId={e.id}"""
+        dbhelper.executeSql(sql, "")
+
         sql = f"""DELETE FROM exams WHERE examId={e.id}"""
         dbhelper.executeSql(sql, "")
         self.refreshExams()
