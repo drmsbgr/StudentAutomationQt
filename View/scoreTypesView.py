@@ -28,11 +28,9 @@ class ScoreTypesView(QtWidgets.QWidget, BaseView):
         self.table.setMinimumHeight(300)
         self.table.setMaximumHeight(600)
 
-        self.refreshScoreTypes()
-
         self.backBtn = QtWidgets.QPushButton("Geri Dön")
 
-        self.createScoreTypeGroup = QtWidgets.QGroupBox("Not Türü Oluşturma")
+        self.createScoreTypeGroup = QtWidgets.QGroupBox("Not Türü İşlemleri")
         self.createScoreTypeGroup.layout = QtWidgets.QVBoxLayout(
             self.createScoreTypeGroup
         )
@@ -123,6 +121,13 @@ class ScoreTypesView(QtWidgets.QWidget, BaseView):
 
         for i, c in enumerate(self.scoreTypes):
             self.table.setItem(i, 0, QtWidgets.QTableWidgetItem(str(c.name)))
+            
+        for row in range(self.table.rowCount()):
+            for col in range(self.table.columnCount()):
+                self.table.item(row, col).setFlags(
+                    self.table.item(row, col).flags()
+                    ^ QtCore.Qt.ItemFlag.ItemIsEditable
+                )
 
     @QtCore.Slot()
     def backToMenu(self):

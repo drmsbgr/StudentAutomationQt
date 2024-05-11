@@ -23,16 +23,15 @@ class CitiesView(QtWidgets.QWidget, BaseView):
         )
         self.table.setMinimumHeight(300)
         self.table.setMaximumHeight(600)
-        self.refreshCities()
 
         self.backBtn = QtWidgets.QPushButton("Geri Dön")
 
-        self.createCityGroup = QtWidgets.QGroupBox("Şehir Oluşturma")
+        self.createCityGroup = QtWidgets.QGroupBox("Şehir İşlemleri")
         self.createCityGroup.layout = QtWidgets.QVBoxLayout(self.createCityGroup)
 
         self.cityNameLabel = QtWidgets.QLabel("Şehir Adı")
         self.cityNameInput = QtWidgets.QPlainTextEdit()
-        self.createCityBtn = QtWidgets.QPushButton("Şehri Ekle")
+        self.createCityBtn = QtWidgets.QPushButton("Şehir Ekle")
         self.overwriteCityBtn = QtWidgets.QPushButton("Seçili Şehrin Üzerine Kaydet")
         self.deleteCityBtn = QtWidgets.QPushButton("Seçili Şehri Sil")
 
@@ -113,6 +112,13 @@ class CitiesView(QtWidgets.QWidget, BaseView):
 
         for i, c in enumerate(self.cities):
             self.table.setItem(i, 0, QtWidgets.QTableWidgetItem(str(c.name)))
+
+        for row in range(self.table.rowCount()):
+            for col in range(self.table.columnCount()):
+                self.table.item(row, col).setFlags(
+                    self.table.item(row, col).flags()
+                    ^ QtCore.Qt.ItemFlag.ItemIsEditable
+                )
 
     @QtCore.Slot()
     def backToMenu(self):

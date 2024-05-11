@@ -26,8 +26,6 @@ class DepartmentsView(QtWidgets.QWidget, BaseView):
         self.table.setMinimumHeight(300)
         self.table.setMaximumHeight(600)
 
-        self.refreshDepartments()
-
         self.createDepartmentGroup = QtWidgets.QGroupBox("Bölüm İşlemleri")
 
         self.createDepartmentGroup.layout = QtWidgets.QVBoxLayout(
@@ -70,6 +68,7 @@ class DepartmentsView(QtWidgets.QWidget, BaseView):
     @override
     def initTitle(self):
         self.mainApp.setWindowTitle("Bölümler")
+        self.refreshDepartments()
 
     @QtCore.Slot()
     def updateInputs(self):

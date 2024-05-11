@@ -30,8 +30,6 @@ class StudentsView(QtWidgets.QWidget, BaseView):
         self.table.setMinimumHeight(300)
         self.table.setMaximumHeight(600)
 
-        self.refreshStudents()
-
         self.backBtn = QtWidgets.QPushButton("Geri Dön")
 
         self.createStudentGroup = QtWidgets.QGroupBox("Öğrenci İşlemleri")
@@ -72,7 +70,7 @@ class StudentsView(QtWidgets.QWidget, BaseView):
         self.createStudentGroup.layout.addWidget(self.deleteStudentBtn)
 
         self.createStudentBtn.clicked.connect(self.createStudent)
-        self.overwriteStudentBtn.clicked.connect(self.createStudent)
+        self.overwriteStudentBtn.clicked.connect(self.overwriteStudent)
         self.deleteStudentBtn.clicked.connect(self.deleteStudent)
 
         self.layout = QtWidgets.QVBoxLayout(self)
@@ -100,6 +98,18 @@ class StudentsView(QtWidgets.QWidget, BaseView):
             ),
         )
 
+        self.refreshStudents()
+
+    @QtCore.Slot()
+    def overwriteStudent(self):
+        if self.nameInput.toPlainText() == "" or self.surnameInput.toPlainText() == "":
+            return
+
+        rowIndex = self.table.selectedItems()[0].row()
+        s = self.students[rowIndex]
+
+        sql = f"""UPDATE students SET studentName='{self.nameInput.toPlainText()}',studentSurname='{self.surnameInput.toPlainText()}',studentNo={self.noInput.value()},studentCityId={self.loadedCities[self.cityInput.currentIndex()].id},studentDepartmentId={self.loadedDepartments[self.departmentInput.currentIndex()].id} WHERE studentId={s.id}"""
+        dbhelper.executeSql(sql, "")
         self.refreshStudents()
 
     @QtCore.Slot()

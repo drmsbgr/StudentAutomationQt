@@ -16,6 +16,9 @@ class MenuView(QtWidgets.QWidget, BaseView):
         self.headerLabel = QtWidgets.QLabel(
             "Tablo Seçin", alignment=QtCore.Qt.AlignCenter
         )
+
+        self.headerLabel.setMaximumHeight(32)
+
         self.studentsBtn = QtWidgets.QPushButton("Öğrenciler")
         self.examsBtn = QtWidgets.QPushButton("Sınavlar")
         self.scoresBtn = QtWidgets.QPushButton("Notlar")
@@ -23,6 +26,19 @@ class MenuView(QtWidgets.QWidget, BaseView):
         self.departmentsBtn = QtWidgets.QPushButton("Bölümler")
         self.citiesBtn = QtWidgets.QPushButton("Şehirler")
         self.quitBtn = QtWidgets.QPushButton("Çık")
+
+        l = (
+            self.studentsBtn,
+            self.examsBtn,
+            self.scoresBtn,
+            self.scoreTypesBtn,
+            self.departmentsBtn,
+            self.citiesBtn,
+            self.quitBtn,
+        )
+
+        for item in l:
+            item.setMinimumHeight(50)
 
         self.layout = QtWidgets.QVBoxLayout(self)
         self.layout.addWidget(self.headerLabel)
