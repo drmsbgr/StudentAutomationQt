@@ -15,7 +15,9 @@ class ScoresView(QtWidgets.QWidget, BaseView):
 
         self.mainApp = mainApp
         self.stackWidget = mainApp.stackedWidget
+        self.layout = QtWidgets.QVBoxLayout(self)
 
+    def initUI(self):
         self.headerLabel = QtWidgets.QLabel("Notlar", alignment=QtCore.Qt.AlignCenter)
 
         self.listingOptionsGroup = QtWidgets.QGroupBox("Listeleme İşlemleri")
@@ -76,7 +78,9 @@ class ScoresView(QtWidgets.QWidget, BaseView):
 
         self.backBtn = QtWidgets.QPushButton("Geri Dön")
 
-        self.layout = QtWidgets.QVBoxLayout(self)
+        for i in reversed(range(self.layout.count())):
+            self.layout.itemAt(i).widget().setParent(None)
+
         self.layout.addWidget(self.headerLabel)
         self.layout.addWidget(self.listingOptionsGroup)
         self.layout.addWidget(self.table)
@@ -87,6 +91,8 @@ class ScoresView(QtWidgets.QWidget, BaseView):
 
     @QtCore.Slot()
     def updateInputs(self):
+        if len(self.table.selectedItems()) == 0:
+            return
         rowIndex = self.table.selectedItems()[0].row()
         s = self.scores[rowIndex]
         self.scoreInput.setValue(s.score)
@@ -124,6 +130,8 @@ class ScoresView(QtWidgets.QWidget, BaseView):
 
     @QtCore.Slot()
     def deleteScore(self):
+        if len(self.table.selectedItems()) == 0:
+            return
         rowIndex = self.table.selectedItems()[0].row()
         s = self.scores[rowIndex]
 
@@ -186,6 +194,25 @@ class ScoresView(QtWidgets.QWidget, BaseView):
     @override
     def initTitle(self):
         self.mainApp.setWindowTitle("Notlar")
+
+        if (
+            len(dbhelper.loadTable("students")) == 0
+            or len(dbhelper.loadTable("scoreTypes")) == 0
+            or len(dbhelper.loadTable("exams")) == 0
+        ):
+            self.warningLabel = QtWidgets.QLabel(
+                "Not ekleyebilmek için önce lütfen en az bir öğrenci, not türü ve sınav oluşturun.",
+                alignment=QtCore.Qt.AlignCenter,
+            )
+            self.backBtn = QtWidgets.QPushButton("Geri Dön")
+            self.backBtn.clicked.connect(self.backToMenu)
+            for i in reversed(range(self.layout.count())):
+                self.layout.itemAt(i).widget().setParent(None)
+            self.layout.addWidget(self.warningLabel)
+            self.layout.addWidget(self.backBtn)
+            return
+
+        self.initUI()
 
         self.loadedExams = [Exam(row[0], row[1]) for row in dbhelper.loadTable("exams")]
         self.examInput.clear()

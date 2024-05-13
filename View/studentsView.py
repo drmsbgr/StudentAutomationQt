@@ -14,10 +14,14 @@ class StudentsView(QtWidgets.QWidget, BaseView):
 
         self.mainApp = mainApp
         self.stackWidget = mainApp.stackedWidget
+        self.layout = QtWidgets.QVBoxLayout(self)
+
+    def initUI(self):
 
         self.headerLabel = QtWidgets.QLabel(
             "Öğrenciler", alignment=QtCore.Qt.AlignCenter
         )
+
         self.table = QtWidgets.QTableWidget()
 
         self.table.setSelectionBehavior(
@@ -73,7 +77,9 @@ class StudentsView(QtWidgets.QWidget, BaseView):
         self.overwriteStudentBtn.clicked.connect(self.overwriteStudent)
         self.deleteStudentBtn.clicked.connect(self.deleteStudent)
 
-        self.layout = QtWidgets.QVBoxLayout(self)
+        for i in reversed(range(self.layout.count())):
+            self.layout.itemAt(i).widget().setParent(None)
+
         self.layout.addWidget(self.headerLabel)
         self.layout.addWidget(self.table)
         self.layout.addWidget(self.createStudentGroup)
@@ -105,6 +111,9 @@ class StudentsView(QtWidgets.QWidget, BaseView):
         if self.nameInput.toPlainText() == "" or self.surnameInput.toPlainText() == "":
             return
 
+        if len(self.table.selectedItems()) == 0:
+            return
+
         rowIndex = self.table.selectedItems()[0].row()
         s = self.students[rowIndex]
 
@@ -114,6 +123,8 @@ class StudentsView(QtWidgets.QWidget, BaseView):
 
     @QtCore.Slot()
     def deleteStudent(self):
+        if len(self.table.selectedItems()) == 0:
+            return
         rowIndex = self.table.selectedItems()[0].row()
         s = self.students[rowIndex]
 
@@ -124,6 +135,25 @@ class StudentsView(QtWidgets.QWidget, BaseView):
     @override
     def initTitle(self):
         self.mainApp.setWindowTitle("Öğrenciler")
+
+        if (
+            len(dbhelper.loadTable("cities")) == 0
+            or len(dbhelper.loadTable("departments")) == 0
+        ):
+            self.warningLabel = QtWidgets.QLabel(
+                "Öğrenci ekleyebilmek için önce lütfen en az bir bölüm ve şehir ekleyin.",
+                alignment=QtCore.Qt.AlignCenter,
+            )
+            self.backBtn = QtWidgets.QPushButton("Geri Dön")
+            self.backBtn.clicked.connect(self.backToMenu)
+            for i in reversed(range(self.layout.count())):
+                self.layout.itemAt(i).widget().setParent(None)
+            self.layout.addWidget(self.warningLabel)
+            self.layout.addWidget(self.backBtn)
+            return
+
+        self.initUI()
+
         self.refreshStudents()
         self.loadedCities = [
             City(row[0], row[1]) for row in dbhelper.loadTable("cities")

@@ -72,6 +72,8 @@ class DepartmentsView(QtWidgets.QWidget, BaseView):
 
     @QtCore.Slot()
     def updateInputs(self):
+        if len(self.table.selectedItems()) == 0:
+            return
         selectedRow = self.table.selectedItems()
         self.depNameInput.setPlainText(selectedRow[0].text())
         self.depDescInput.setPlainText(selectedRow[1].text())
@@ -110,10 +112,12 @@ class DepartmentsView(QtWidgets.QWidget, BaseView):
 
     @QtCore.Slot()
     def deleteDepartment(self):
+        if len(self.table.selectedItems()) == 0:
+            return
         rowIndex = self.table.selectedItems()[0].row()
         selectedDepartment = self.departments[rowIndex]
         sql = f"""DELETE FROM departments WHERE departmentId={selectedDepartment.id}"""
-        dbhelper.executeSql(sql)
+        dbhelper.executeSql(sql, "")
         self.refreshDepartments()
 
     def refreshDepartments(self):

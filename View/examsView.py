@@ -76,6 +76,8 @@ class ExamsView(QtWidgets.QWidget, BaseView):
     def overwriteExam(self):
         if self.examNameInput.toPlainText() == "":
             return
+        if len(self.table.selectedItems()) == 0:
+            return
         rowIndex = self.table.selectedItems()[0].row()
         e = self.exams[rowIndex]
 
@@ -85,6 +87,8 @@ class ExamsView(QtWidgets.QWidget, BaseView):
 
     @QtCore.Slot()
     def deleteExam(self):
+        if len(self.table.selectedItems()) == 0:
+            return
         rowIndex = self.table.selectedItems()[0].row()
         e = self.exams[rowIndex]
 
@@ -97,6 +101,8 @@ class ExamsView(QtWidgets.QWidget, BaseView):
 
     @QtCore.Slot()
     def updateInputs(self):
+        if len(self.table.selectedItems()) == 0:
+            return
         rowIndex = self.table.selectedItems()[0].row()
         e = self.exams[rowIndex]
 

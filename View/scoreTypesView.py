@@ -84,6 +84,8 @@ class ScoreTypesView(QtWidgets.QWidget, BaseView):
     def overwriteScoreType(self):
         if self.scoreTypeNameInput.toPlainText() == "":
             return
+        if len(self.table.selectedItems()) == 0:
+            return
         rowIndex = self.table.selectedItems()[0].row()
         st = self.scoreTypes[rowIndex]
 
@@ -95,6 +97,8 @@ class ScoreTypesView(QtWidgets.QWidget, BaseView):
 
     @QtCore.Slot()
     def deleteScoreType(self):
+        if len(self.table.selectedItems()) == 0:
+            return
         rowIndex = self.table.selectedItems()[0].row()
         st = self.scoreTypes[rowIndex]
 
@@ -106,6 +110,9 @@ class ScoreTypesView(QtWidgets.QWidget, BaseView):
 
     @QtCore.Slot()
     def updateInputs(self):
+        
+        if len(self.table.selectedItems()) == 0:
+            return
         rowIndex = self.table.selectedItems()[0].row()
         st = self.scoreTypes[rowIndex]
         self.scoreTypeNameInput.setPlainText(st.name)
