@@ -123,19 +123,24 @@ class DepartmentsView(QtWidgets.QWidget, BaseView):
     def refreshDepartments(self):
         l = dbhelper.loadTable("departments")
 
-        self.departments = []
-
-        for row in l:
-            self.departments.append(Department(row[0], row[1], row[2]))
+        self.departments = [Department(row[0], row[1], row[2]) for row in l]
 
         self.table.setRowCount(len(self.departments))
-        self.table.setColumnCount(2)
-        self.table.setHorizontalHeaderLabels(["Bölüm Adı", "Bölüm Açıklaması"])
+        self.table.setColumnCount(3)
+        self.table.setHorizontalHeaderLabels(
+            ["Bölüm Adı", "Bölüm Açıklaması", "Öğrenci Sayısı"]
+        )
 
         for i, c in enumerate(self.departments):
             # self.table.setItem(i, 0, QtWidgets.QTableWidgetItem(str(c.id)))
             self.table.setItem(i, 0, QtWidgets.QTableWidgetItem(str(c.name)))
             self.table.setItem(i, 1, QtWidgets.QTableWidgetItem(str(c.desc)))
+            sql1 = f"""SELECT * FROM students WHERE studentDepartmentId={c.id}"""
+            conn = dbhelper.connectDB()
+            cur = conn.cursor()
+            students = cur.execute(sql1).fetchall()
+            self.table.setItem(i, 2, QtWidgets.QTableWidgetItem(str(len(students))))
+            conn.close()
 
         for row in range(self.table.rowCount()):
             for col in range(self.table.columnCount()):

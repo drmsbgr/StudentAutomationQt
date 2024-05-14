@@ -200,7 +200,7 @@ class StudentsView(QtWidgets.QWidget, BaseView):
         SELECT studentId, studentName, studentSurname, studentNo, cityId, cityName , departmentId, departmentName, departmentDesc FROM students
         INNER JOIN cities ON students.studentCityId = cities.cityId
         INNER JOIN departments ON students.studentDepartmentId = departments.departmentId
-        """
+        ORDER BY studentNo"""
 
         conn = dbhelper.connectDB()
         cur = conn.cursor()

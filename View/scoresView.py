@@ -147,7 +147,8 @@ class ScoresView(QtWidgets.QWidget, BaseView):
         INNER JOIN scoreTypes ON scores.scoreTypeId=scoreTypes.scoreTypeId
         INNER JOIN students ON studentId=scoreStudentId
         INNER JOIN exams ON examId=scoreExamId
-        WHERE examId={self.loadedExams[self.examInput.currentIndex()].id}"""
+        WHERE examId={self.loadedExams[self.examInput.currentIndex()].id}
+        ORDER BY scores.scoreTypeId"""
 
         conn = dbhelper.connectDB()
         cur = conn.cursor()
